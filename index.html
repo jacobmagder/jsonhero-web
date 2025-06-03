@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Tree Viewer</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON Hero Clone</title>
+    <script>
+      ;(function() {
+        function getInitialTheme() {
+          // Basic localStorage check - can be expanded
+          // try {
+          //   const persistedColorPreference = window.localStorage.getItem('app-theme');
+          //   if (typeof persistedColorPreference === 'string') {
+          //     return persistedColorPreference;
+          //   }
+          // } catch (e) {
+          //   // ignore
+          // }
+          const mql = window.matchMedia('(prefers-color-scheme: light)');
+          return mql.matches ? 'light' : 'dark';
+        }
+        const theme = getInitialTheme();
+        const cl = document.documentElement.classList;
+        if (!cl.contains(theme)) { // check if class is already set
+            cl.remove(theme === 'light' ? 'dark' : 'light'); // remove opposite
+            cl.add(theme);
+        }
+      })();
+    </script>
+    <link href="tailwind.css" rel="stylesheet">
+    <!-- Fonts from user feedback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&family=Roboto+Mono&display=swap" rel="stylesheet">
 </head>
-<body>
-    <textarea id="json-input" placeholder="Paste JSON here"></textarea>
-    <input type="file" id="json-file-input" accept=".json">
-    <div id="tree-display"></div>
-    <div id="controls">
-        <select id="tree-style-select"></select>
-        <input type="search" id="search-input" placeholder="Search...">
-        <button id="filter-button">Filter</button>
-        <button id="expand-all-button">Expand All</button>
-        <button id="collapse-all-button">Collapse All</button>
-        <button id="save-button">Save</button>
-        <button id="convert-button">Convert</button>
-    </div>
-    <script src="script.js" defer></script>
-
-    <div id="test-runner">
-        <h2>Unit Test Results</h2>
-        <button id="run-tests-button">Run Tests</button>
-        <pre id="test-results"></pre>
-    </div>
+<body class="bg-white dark:bg-slate-900">
+    <div id="root"></div>
+    <!-- Main application script will be injected here by the build process -->
+    <!-- For development, you'd link your main.tsx or similar -->
+    <!-- <script type="module" src="/src/main.tsx"></script> -->
 </body>
 </html>
