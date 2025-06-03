@@ -1,217 +1,253 @@
-/* 1. Basic page styling */
+/* Basic Reset & Body Styling */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    padding: 20px;
-    background-color: #f4f7f6;
-    color: #333;
-    line-height: 1.6;
-}
-
-textarea#json-input {
-    width: calc(100% - 22px); /* Account for padding/border */
-    height: 150px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 0.9em;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-/* 2. Style the controls area */
-div#controls {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
-    gap: 10px; /* Spacing between control elements */
-    margin-bottom: 20px;
+    flex-direction: column;
+    height: 100vh;
+    --font-color: #333;
+    --bg-color: #f4f4f4;
+    --panel-bg-color: #fff;
+    --border-color: #ccc;
+    --button-bg-color: #007bff;
+    --button-text-color: #fff;
+    --button-hover-bg-color: #0056b3;
+    --selected-bg-color: #e0e0e0;
+    --selected-text-color: #000;
+
+    /* Tree Node Colors */
+    --key-color: #990055; /* Dark pink/purple */
+    --string-color: #008000; /* Green */
+    --number-color: #0000ff; /* Blue */
+    --boolean-color: #ff8c00; /* DarkOrange */
+    --null-color: #800080; /* Purple */
+    --toggle-color: #007bff;
+}
+
+body.dark-theme {
+    --font-color: #f0f0f0;
+    --bg-color: #1e1e1e;
+    --panel-bg-color: #2a2a2a;
+    --border-color: #555;
+    --button-bg-color: #007bff; /* Keeping button color same, or can be themed */
+    --button-text-color: #fff;
+    --button-hover-bg-color: #0056b3;
+    --selected-bg-color: #4a4a4a;
+    --selected-text-color: #fff;
+
+    /* Tree Node Colors - Dark Theme */
+    --key-color: #ff79c6; /* Pink */
+    --string-color: #50fa7b; /* Green */
+    --number-color: #8be9fd; /* Cyan */
+    --boolean-color: #f1fa8c; /* Yellow */
+    --null-color: #bd93f9; /* Purple */
+    --toggle-color: #8be9fd;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Toolbar */
+.toolbar {
+    background-color: var(--panel-bg-color);
     padding: 10px;
-    background-color: #e9ecef;
-    border-radius: 5px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-div#controls > * {
-    margin-right: 10px; /* Default margin for elements */
+.toolbar button {
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
     border-radius: 4px;
-    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-div#controls button {
+.toolbar button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+/* Main Container Layout */
+.container {
+    display: flex;
+    flex-grow: 1;
+    padding: 10px;
+    gap: 10px;
+    overflow: hidden; /* Prevent container itself from scrolling */
+}
+
+.input-area, .output-area {
+    background-color: var(--panel-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 15px;
+    display: flex; /* Enable flex for children */
+    flex-direction: column; /* Stack children vertically */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.input-area {
+    flex-basis: 40%; /* Input area takes 40% */
+}
+
+.output-area {
+    flex-basis: 60%; /* Output area takes 60% */
+}
+
+#json-input {
+    width: calc(100% - 20px); /* Account for padding */
+    flex-grow: 1; /* Textarea takes available space in input-area */
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    resize: none; /* Or 'vertical' if preferred */
+    background-color: var(--bg-color); /* Use main bg for textarea itself */
+    color: var(--font-color);
+}
+
+/* Selected Path Display */
+#selected-path-display-container {
+    padding: 8px 0; /* Padding above and below */
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85em;
+    color: var(--font-color);
+    flex-shrink: 0; /* Prevent shrinking */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#selected-path-display-container span {
+    word-break: break-all;
+}
+#copy-path-button {
+    padding: 4px 8px;
+    font-size: 0.8em;
+    margin-left: 10px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 3px;
     cursor: pointer;
 }
-
-div#controls button:hover {
-    background-color: #f0f0f0;
-}
-
-div#controls input[type="search"],
-div#controls select {
-    min-width: 150px; /* Give search and select some base width */
+#copy-path-button:hover {
+    background-color: var(--button-hover-bg-color);
 }
 
 
-/* 3. Style the tree display area */
-div#tree-display {
-    border: 1px solid #ccc;
-    min-height: 200px;
-    padding: 15px;
-    overflow: auto;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* JSON Tree Display Area */
+#json-tree-display {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    overflow-y: auto; /* Allow vertical scrolling for tree */
+    flex-grow: 1; /* Tree display takes available space in output-area */
+    padding-right: 10px; /* For scrollbar */
 }
 
-.error-message {
-    color: #d9534f; /* Bootstrap danger color */
-    background-color: #f2dede; /* Bootstrap danger background */
-    border: 1px solid #ebccd1; /* Bootstrap danger border */
-    padding: 10px;
-    border-radius: 4px;
+/* Tree Node Styling */
+.json-node {
+    margin-left: 20px; /* Indentation for nested nodes */
+}
+.json-node > div { /* Direct children of a node are properties or array items */
+    padding: 2px 0;
 }
 
-/* 4. Style the tree nodes */
-.tree-node {
-    padding: 3px 0; /* Vertical padding for each node */
-    margin-left: 20px; /* Default indentation for all nodes */
-}
-
-.tree-node .key {
+.json-key {
+    color: var(--key-color);
     font-weight: bold;
-    color: #0056b3; /* Dark blue for keys */
+    cursor: pointer;
+}
+.json-key:hover {
+    text-decoration: underline;
 }
 
-.tree-node .value {
-    color: #28a745; /* Green for values */
+.json-value {
+    cursor: pointer;
+}
+.json-value:hover {
+    text-decoration: underline;
 }
 
-.tree-node-internal > .key {
-    /* Styles specific to keys of internal nodes if needed */
-}
+.json-value.string { color: var(--string-color); }
+.json-value.number { color: var(--number-color); }
+.json-value.boolean { color: var(--boolean-color); }
+.json-value.null { color: var(--null-color); font-style: italic; }
 
-.tree-node-internal > span:not(.key) { /* Target the {Object} or [Array] span */
-    color: #888;
-    font-style: italic;
-    margin-left: 5px;
-}
-
-
-.tree-node-leaf {
-    /* Styles specific to leaf nodes if needed */
-}
-
-/* Style for the div containing nested children, already has margin-left in JS */
-.tree-node-internal > div {
-    /* border-left: 1px dashed #ddd; */ /* Optional: visual guide for nesting */
-    /* padding-left: 10px; */ /* Additional padding for children if margin-left on .tree-node is not enough */
-}
-
-
-/* 5. Implement basic tree styles for tree-style-select (placeholder) */
-/* These classes would be added to tree-display or individual nodes via JS */
-
-.tree-style-compact .tree-node {
-    padding: 1px 0;
-    margin-left: 15px;
-}
-.tree-style-compact .tree-node-internal > div {
-    /* Adjustments for compact style if needed */
-}
-
-.tree-style-spacious .tree-node {
-    padding: 5px 0;
-    margin-left: 25px;
-}
-.tree-style-spacious .tree-node-internal > div {
-    /* Adjustments for spacious style if needed */
-}
-
-/* Styling for rendered images in tree */
-.tree-node-image {
-    max-width: 150px;
-    max-height: 100px;
-    border: 1px solid #eee;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-    margin-top: 5px; /* Space between key and image */
-    display: block; /* Ensure it takes up its own line if needed */
-}
-
-/* Styles for search functionality */
-.highlight {
-    background-color: #fff3cd; /* A light yellow, similar to Bootstrap's warning background */
-    border-radius: 3px; /* Optional: adds rounded corners to highlight */
-    /* box-shadow: 0 0 3px #ffe066; */ /* Optional: adds a subtle glow */
-}
-
-.highlight .key,
-.highlight .value {
-    /* color: #000 !important; */ /* Ensure text is readable on highlight, might need !important */
-}
-
-.hidden {
-    display: none !important; /* Use !important to ensure it overrides other display properties */
-}
-
-/* Styles for collapse/expand functionality */
-.toggle-icon {
+.json-toggle {
     cursor: pointer;
     margin-right: 5px;
-    user-select: none; /* Prevent text selection on click */
-    display: inline-block; /* Ensure it aligns well and has dimensions */
-    width: 1em; /* Give it some space */
-    text-align: center;
+    color: var(--toggle-color);
+    display: inline-block; /* Ensure it takes space */
+    width: 1em; /* Fixed width for alignment */
+    user-select: none; /* Prevent text selection on toggle */
 }
 
-.toggle-icon.collapsed-icon::before {
-    content: '▶'; /* Right-pointing triangle */
+.json-node-container { /* Container for children of an object/array */
+    /* No specific style needed unless for borders/etc */
 }
 
-.toggle-icon.expanded-icon::before {
-    content: '▼'; /* Down-pointing triangle */
+.hidden > .json-node-container { /* If .hidden is on the parent of the children container */
+    display: none;
 }
-
-/* This is the container for children of a node */
-.tree-node-children-container {
-    /* margin-left is handled by .tree-node on its children for now, or by the parent's padding-left */
-}
-
-/* When a node item is collapsed, hide its children container */
-.tree-node-item.collapsed > .tree-node-children-container {
+/* Alternative: a class directly on the children container */
+.children-hidden {
     display: none;
 }
 
-/* Styles for Test Runner */
-#test-runner {
-    margin-top: 30px;
-    padding: 15px;
-    border-top: 2px solid #007bff; /* Blue top border */
-    background-color: #f8f9fa; /* Light grey background */
+
+.selected-node {
+    background-color: var(--selected-bg-color);
+    color: var(--selected-text-color); /* Ensure text is readable on selection */
+    border-radius: 2px;
+    padding: 1px 3px; /* Small padding for the highlight */
+    display: inline; /* So it only highlights the text itself */
+}
+.selected-node .json-key, /* Ensure nested selected elements also get right text color */
+.selected-node .json-value.string,
+.selected-node .json-value.number,
+.selected-node .json-value.boolean,
+.selected-node .json-value.null {
+    color: var(--selected-text-color);
 }
 
-#test-runner h2 {
-    margin-top: 0;
-    color: #0056b3;
-}
 
-#test-results {
-    background-color: #fff;
-    border: 1px solid #ced4da; /* Standard input border color */
+/* Error Message Styling */
+.error-message {
+    color: red;
+    font-weight: bold;
     padding: 10px;
-    min-height: 100px;
-    max-height: 400px; /* Prevent it from getting too tall */
-    overflow-y: auto; /* Scroll for many results */
-    white-space: pre-wrap; /* Wrap long lines but preserve formatting */
-    font-family: "Courier New", Courier, monospace;
-    font-size: 0.9em;
-    color: #495057; /* Dark grey text */
+    border: 1px solid red;
+    background-color: #ffe0e0;
+    border-radius: 4px;
+}
+body.dark-theme .error-message {
+    color: #ffcccc;
+    border-color: #ff9999;
+    background-color: #552222;
 }
 
-#test-results .pass {
-    color: #28a745; /* Green for pass */
-    font-weight: bold;
-}
 
-#test-results .fail {
-    color: #dc3545; /* Red for fail */
-    font-weight: bold;
+/* Responsive: Stack input and output areas on smaller screens */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .input-area, .output-area {
+        flex-basis: auto; /* Reset basis */
+        height: 50%; /* Each takes half height */
+    }
+    .input-area {
+        margin-bottom: 10px; /* Space between stacked panels */
+    }
 }

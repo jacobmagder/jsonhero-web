@@ -1,42 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JSON Hero Clone</title>
-    <script>
-      ;(function() {
-        function getInitialTheme() {
-          // Basic localStorage check - can be expanded
-          // try {
-          //   const persistedColorPreference = window.localStorage.getItem('app-theme');
-          //   if (typeof persistedColorPreference === 'string') {
-          //     return persistedColorPreference;
-          //   }
-          // } catch (e) {
-          //   // ignore
-          // }
-          const mql = window.matchMedia('(prefers-color-scheme: light)');
-          return mql.matches ? 'light' : 'dark';
-        }
-        const theme = getInitialTheme();
-        const cl = document.documentElement.classList;
-        if (!cl.contains(theme)) { // check if class is already set
-            cl.remove(theme === 'light' ? 'dark' : 'light'); // remove opposite
-            cl.add(theme);
-        }
-      })();
-    </script>
-    <link href="tailwind.css" rel="stylesheet">
-    <!-- Fonts from user feedback -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure JSON Viewer</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-white dark:bg-slate-900">
-    <div id="root"></div>
-    <!-- Main application script will be injected here by the build process -->
-    <!-- For development, you'd link your main.tsx or similar -->
-    <!-- <script type="module" src="/src/main.tsx"></script> -->
+<body>
+    <div class="toolbar">
+        <button id="theme-toggle-button">Toggle Theme</button>
+        <button id="process-json-button">View JSON</button>
+        <button id="save-json-button">Save JSON</button> <!-- Added for optional step 5 -->
+    </div>
+
+    <div class="container">
+        <div class="input-area">
+            <textarea id="json-input" placeholder="Paste your JSON here..."></textarea>
+        </div>
+
+        <div class="output-area">
+            <div id="selected-path-display-container">
+                Path: <span id="selected-path-display"></span>
+                <button id="copy-path-button" title="Copy Path">Copy</button>
+            </div>
+            <div id="json-tree-display">
+                <!-- JSON tree will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
 </body>
 </html>
