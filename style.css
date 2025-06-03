@@ -1,0 +1,217 @@
+/* 1. Basic page styling */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    padding: 20px;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+textarea#json-input {
+    width: calc(100% - 22px); /* Account for padding/border */
+    height: 150px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.9em;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* 2. Style the controls area */
+div#controls {
+    display: flex;
+    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
+    gap: 10px; /* Spacing between control elements */
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+div#controls > * {
+    margin-right: 10px; /* Default margin for elements */
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+div#controls button {
+    cursor: pointer;
+}
+
+div#controls button:hover {
+    background-color: #f0f0f0;
+}
+
+div#controls input[type="search"],
+div#controls select {
+    min-width: 150px; /* Give search and select some base width */
+}
+
+
+/* 3. Style the tree display area */
+div#tree-display {
+    border: 1px solid #ccc;
+    min-height: 200px;
+    padding: 15px;
+    overflow: auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.error-message {
+    color: #d9534f; /* Bootstrap danger color */
+    background-color: #f2dede; /* Bootstrap danger background */
+    border: 1px solid #ebccd1; /* Bootstrap danger border */
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* 4. Style the tree nodes */
+.tree-node {
+    padding: 3px 0; /* Vertical padding for each node */
+    margin-left: 20px; /* Default indentation for all nodes */
+}
+
+.tree-node .key {
+    font-weight: bold;
+    color: #0056b3; /* Dark blue for keys */
+}
+
+.tree-node .value {
+    color: #28a745; /* Green for values */
+}
+
+.tree-node-internal > .key {
+    /* Styles specific to keys of internal nodes if needed */
+}
+
+.tree-node-internal > span:not(.key) { /* Target the {Object} or [Array] span */
+    color: #888;
+    font-style: italic;
+    margin-left: 5px;
+}
+
+
+.tree-node-leaf {
+    /* Styles specific to leaf nodes if needed */
+}
+
+/* Style for the div containing nested children, already has margin-left in JS */
+.tree-node-internal > div {
+    /* border-left: 1px dashed #ddd; */ /* Optional: visual guide for nesting */
+    /* padding-left: 10px; */ /* Additional padding for children if margin-left on .tree-node is not enough */
+}
+
+
+/* 5. Implement basic tree styles for tree-style-select (placeholder) */
+/* These classes would be added to tree-display or individual nodes via JS */
+
+.tree-style-compact .tree-node {
+    padding: 1px 0;
+    margin-left: 15px;
+}
+.tree-style-compact .tree-node-internal > div {
+    /* Adjustments for compact style if needed */
+}
+
+.tree-style-spacious .tree-node {
+    padding: 5px 0;
+    margin-left: 25px;
+}
+.tree-style-spacious .tree-node-internal > div {
+    /* Adjustments for spacious style if needed */
+}
+
+/* Styling for rendered images in tree */
+.tree-node-image {
+    max-width: 150px;
+    max-height: 100px;
+    border: 1px solid #eee;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    margin-top: 5px; /* Space between key and image */
+    display: block; /* Ensure it takes up its own line if needed */
+}
+
+/* Styles for search functionality */
+.highlight {
+    background-color: #fff3cd; /* A light yellow, similar to Bootstrap's warning background */
+    border-radius: 3px; /* Optional: adds rounded corners to highlight */
+    /* box-shadow: 0 0 3px #ffe066; */ /* Optional: adds a subtle glow */
+}
+
+.highlight .key,
+.highlight .value {
+    /* color: #000 !important; */ /* Ensure text is readable on highlight, might need !important */
+}
+
+.hidden {
+    display: none !important; /* Use !important to ensure it overrides other display properties */
+}
+
+/* Styles for collapse/expand functionality */
+.toggle-icon {
+    cursor: pointer;
+    margin-right: 5px;
+    user-select: none; /* Prevent text selection on click */
+    display: inline-block; /* Ensure it aligns well and has dimensions */
+    width: 1em; /* Give it some space */
+    text-align: center;
+}
+
+.toggle-icon.collapsed-icon::before {
+    content: '▶'; /* Right-pointing triangle */
+}
+
+.toggle-icon.expanded-icon::before {
+    content: '▼'; /* Down-pointing triangle */
+}
+
+/* This is the container for children of a node */
+.tree-node-children-container {
+    /* margin-left is handled by .tree-node on its children for now, or by the parent's padding-left */
+}
+
+/* When a node item is collapsed, hide its children container */
+.tree-node-item.collapsed > .tree-node-children-container {
+    display: none;
+}
+
+/* Styles for Test Runner */
+#test-runner {
+    margin-top: 30px;
+    padding: 15px;
+    border-top: 2px solid #007bff; /* Blue top border */
+    background-color: #f8f9fa; /* Light grey background */
+}
+
+#test-runner h2 {
+    margin-top: 0;
+    color: #0056b3;
+}
+
+#test-results {
+    background-color: #fff;
+    border: 1px solid #ced4da; /* Standard input border color */
+    padding: 10px;
+    min-height: 100px;
+    max-height: 400px; /* Prevent it from getting too tall */
+    overflow-y: auto; /* Scroll for many results */
+    white-space: pre-wrap; /* Wrap long lines but preserve formatting */
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.9em;
+    color: #495057; /* Dark grey text */
+}
+
+#test-results .pass {
+    color: #28a745; /* Green for pass */
+    font-weight: bold;
+}
+
+#test-results .fail {
+    color: #dc3545; /* Red for fail */
+    font-weight: bold;
+}
